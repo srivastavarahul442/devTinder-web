@@ -1,14 +1,39 @@
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../utils/constants";
+import { removeUser } from "../utils/userSlice";
 
 const Navbar = () => {
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const user = useSelector((store) => store.user);
-  
+
+  const handleHome = () => {
+    if(!user){
+      return navigate("/login");
+    }
+    return navigate("/")
+  }
+
+  const handleLogout = async () => {
+    try {
+      const res = await axios.post(BASE_URL + "/logout",{}, {
+        withCredentials: true,
+      });
+      dispatch(removeUser())
+      navigate("/login")
+    } catch (err) {
+      //
+    }
+  };
+
   return (
     <div className="navbar bg-base-300">
       <div className="flex-1">
-        <Link to="/" className="btn btn-ghost text-xl">👩‍💻CodeMate👨‍💻</Link>
+        <a onClick={handleHome} className="btn btn-ghost text-xl">
+          👩‍💻CodeMate👨‍💻
+        </a>
       </div>
       <div className="flex-none gap-2">
         {user && <p>Welcome, {user.firstName}</p>}
@@ -20,10 +45,7 @@ const Navbar = () => {
               className="btn btn-ghost btn-circle avatar"
             >
               <div className="w-10 rounded-full">
-                <img
-                  alt="Tailwind CSS Navbar component"
-                  src={user.photoUrl}
-                />
+                <img alt="Tailwind CSS Navbar component" src={user.photoUrl} />
               </div>
             </div>
           )}
@@ -41,7 +63,7 @@ const Navbar = () => {
               <a>Settings</a>
             </li>
             <li>
-              <a>Logout</a>
+              <a onClick={handleLogout}>Logout</a>
             </li>
           </ul>
         </div>
