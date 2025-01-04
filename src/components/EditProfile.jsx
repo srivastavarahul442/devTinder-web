@@ -13,22 +13,37 @@ const EditProfile = ({ user }) => {
   const [gender, setGender] = useState(user.gender);
   const [about, setAbout] = useState(user.about);
 
+  const [saveMessage, setSaveMessage] = useState(false);
+
   const dispatch = useDispatch();
 
   const saveProfile = async () => {
-    try{
-        const res = await axios.patch(BASE_URL+"/profile/edit",{
-            firstName,lastName,photoUrl,age,gender,about
-        },{
-            withCredentials: true,
-        })
-        dispatch(addUser(res?.data?.data))
-        console.log(res)
+    setSaveMessage(true);
+    setTimeout(() => {
+      setSaveMessage(false);
+    }, 3000);
+    try {
+      const res = await axios.put(
+        BASE_URL + "/profile/edit",
+        {
+          firstName,
+          lastName,
+          photoUrl,
+          age,
+          gender,
+          about,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      dispatch(addUser(res?.data?.data));
+
+      console.log(res);
+    } catch (err) {
+      console.log(err);
     }
-    catch(err){
-        console.log(err)
-    }
-  }
+  };
 
   return (
     <div className="flex justify-center gap-10 my-10">
@@ -94,19 +109,28 @@ const EditProfile = ({ user }) => {
             <div className="label">
               <span className="label-text">About:</span>
             </div>
-            <input
-              type="text"
-              className="input input-bordered w-full max-w-lg"
+            <textarea
+              className="textarea textarea-bordered"
               value={about}
               onChange={(e) => setAbout(e.target.value)}
-            />
+            ></textarea>
           </label>
-          <button className="btn btn-primary my-4 w-[40%] mx-auto" onClick={saveProfile}>
+          <button
+            className="btn btn-primary my-4 w-[40%] mx-auto"
+            onClick={saveProfile}
+          >
             Save Profile
           </button>
         </div>
       </div>
-      <UserCard user={{firstName, lastName, age, gender, photoUrl, about}} />
+      <UserCard user={{ firstName, lastName, age, gender, photoUrl, about }} />
+      {saveMessage && (
+        <div className="toast toast-top toast-center">
+          <div className="alert alert-success">
+            <span>Profile saved successfully.</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
