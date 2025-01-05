@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { addRequest } from "../utils/requestSlice";
-import { addConnections } from "../utils/connectionSlice";
+
 
 const Requests = () => {
   const dispatch = useDispatch();
@@ -18,7 +18,7 @@ const Requests = () => {
       }
     );
 
-    console.log(status);
+    
     fetchRequest();
   };
 
@@ -41,6 +41,8 @@ const Requests = () => {
 
   if (!requests) return;
 
+  if(requests.length==0) return <h1 className="flex justify-center my-10 font-bold">No Request Found</h1>
+
   return (
     <>
       {requests.map((request) => {
@@ -60,10 +62,15 @@ const Requests = () => {
               <p>{about}</p>
             </div>
             <div className="w-2/6 flex justify-evenly">
-              <button className="btn btn-primary  text-lg">Reject</button>
+              <button
+                className="btn btn-primary  text-lg"
+                onClick={(e) => reviewRequest(request._id, "rejected")}
+              >
+                Reject
+              </button>
               <button
                 className="btn btn-secondary text-lg"
-                onClick={(e) => reviewRequest(request._id,"accepted")}
+                onClick={(e) => reviewRequest(request._id, "accepted")}
               >
                 Accept
               </button>

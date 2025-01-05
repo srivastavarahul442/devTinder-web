@@ -8,10 +8,10 @@ import { addUser } from "../utils/userSlice";
 const EditProfile = ({ user }) => {
   const [firstName, setFirstName] = useState(user.firstName);
   const [lastName, setLastName] = useState(user.lastName);
-  const [photoUrl, setPhotoUrl] = useState(user.photoUrl);
-  const [age, setAge] = useState(user.age);
-  const [gender, setGender] = useState(user.gender);
-  const [about, setAbout] = useState(user.about);
+  const [photoUrl, setPhotoUrl] = useState(user.photoUrl || "https://static.vecteezy.com/system/resources/previews/035/624/082/non_2x/user-profile-person-icon-in-flat-isolated-in-suitable-for-social-media-man-profiles-screensavers-depicting-male-face-silhouettes-for-apps-website-vector.jpg");
+  const [age, setAge] = useState(user.age ||"");
+  const [gender, setGender] = useState(user.gender||"");
+  const [about, setAbout] = useState(user.about || "Hi, this is default details about user");
 
   const [saveMessage, setSaveMessage] = useState(false);
 
@@ -46,7 +46,7 @@ const EditProfile = ({ user }) => {
   };
 
   return (
-    <div className="flex justify-center gap-10 my-10">
+   <div className="flex justify-center gap-10 my-10">
       <div className="flex justify-center">
         <div className="card bg-base-300 w-96 shadow-xl p-5">
           <h1 className="text-center text-lg font-bold my-3">Edit Profile</h1>
