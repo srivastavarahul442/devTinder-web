@@ -8,10 +8,10 @@ import UserCard from "./userCard";
 const Feed = () => {
   const feed = useSelector((store) => store.feed);
   const dispatch = useDispatch();
-  console.log(feed)
+  // console.log(feed)
 
   const getFeed = async () => {
-    if (feed) return;
+    if (feed,length>=1) return;
     try {
       const res = await axios.get(BASE_URL + "/feed", {
         withCredentials: true,
@@ -26,9 +26,11 @@ const Feed = () => {
     getFeed();
   }, []);
 
+ 
+
   return (
-    feed && <div className="flex justify-center my-10">
-      <UserCard user={feed?.data[0]}/>
+    feed.length>=1 && <div className="flex justify-center my-10">
+      <UserCard user={feed[0]}/>
     </div>
   );
 };

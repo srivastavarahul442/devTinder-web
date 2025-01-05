@@ -10,10 +10,15 @@ const Connections = () => {
   const connections = useSelector((store) => store.connection);
 
   const fetchConnections = async () => {
-    const res = await axios.get(BASE_URL + "/user/connections", {
-      withCredentials: true,
-    });
-    dispatch(addConnections(res?.data?.data));
+    try{
+        const res = await axios.get(BASE_URL + "/user/connections", {
+            withCredentials: true,
+          });
+          dispatch(addConnections(res?.data?.data));
+    }
+    catch(err){
+        console.error(err)
+    }
   };
 
   useEffect(() => {
@@ -35,7 +40,7 @@ const Connections = () => {
       <h1 className="text-center font-bold text-2xl my-10">Connections</h1>
 
       {connections.map((connecion) => (
-        <ConnectionCard connection={connecion} />
+        <ConnectionCard key={connecion._id} connection={connecion} />
       ))}
     </div>
   );
